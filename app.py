@@ -2,7 +2,7 @@
 
 import tkinter as tk
 
-import svgwrite
+import svgwrite as svgwrite
 
 
 class SVGWriter:
@@ -10,16 +10,19 @@ class SVGWriter:
         self.root = tk.Tk("diem")
         self.root.title("Thiết kế svg file")
         note = tk.Label(
-            text="Tạo hình svg với setup thuộc tính bên dưới và dùng chuột click vào khung vàng \n sau đó bấm save, file được lưu ra file output \n đối với  vẽ line chỉ add toạ độ 2 điểm")
+            text="Tạo hình svg với setup thuộc tính bên dưới và dùng chuột click vào khung vàng \n sau đó bấm save, file được lưu ra file output \n đối với  vẽ line chỉ add toạ độ 2 điểm"
+        )
         note.pack(side=tk.TOP)
-        self.canvas = tk.Canvas(self.root, width=700, height=500, border=1, background="yellow")
+        self.canvas = tk.Canvas(
+            self.root, width=700, height=500, border=1, background="yellow"
+        )
 
         self.canvas.pack()
         self.shapes = []
         self.colors = ["black", "red", "green", "blue", "yellow", "purple"]
         self.current_color = tk.StringVar(self.root)
         self.stroke_width = 1
-        self.fill_color = '#FFFFFF'
+        self.fill_color = "#FFFFFF"
         self.current_shape = tk.StringVar(self.root)
         self.current_params = {}
         self.width = 50
@@ -51,14 +54,18 @@ class SVGWriter:
         shape_label = tk.Label(frame, text="Select Shape:")
         shape_label.pack(side=tk.LEFT)
         shape_inside.set("select Shape: ")
-        option_shape = tk.OptionMenu(frame, self.current_shape, *shapes, command=self.set_shape)
+        option_shape = tk.OptionMenu(
+            frame, self.current_shape, *shapes, command=self.set_shape
+        )
         option_shape.pack(side=tk.LEFT)
 
         # Create color picker
         # color_button = tk.Button(self.root, text="Color", command=self.pick_color)
         color_label = tk.Label(frame, text="Select Color:")
         color_label.pack(side=tk.LEFT)
-        color_pick = tk.OptionMenu(frame, self.current_color, *self.colors, command=self.pick_color)
+        color_pick = tk.OptionMenu(
+            frame, self.current_color, *self.colors, command=self.pick_color
+        )
         color_pick.pack(side=tk.LEFT)
         width_label = tk.Label(frame, text="Width of object: ")
         width_label.pack(side=tk.LEFT)
@@ -95,7 +102,9 @@ class SVGWriter:
 
         add_point_button = tk.Button(middle_frame, text="add point", command=add_point)
         add_point_button.pack(side=tk.LEFT)
-        clear_point_button = tk.Button(middle_frame, text='reset Point', command=self.clear_point)
+        clear_point_button = tk.Button(
+            middle_frame, text="reset Point", command=self.clear_point
+        )
         clear_point_button.pack(side=tk.LEFT)
         title_text = tk.Label(text_frame, text="Setup thông tin tạo text", underline=2)
         title_text.pack(side=tk.TOP)
@@ -116,8 +125,15 @@ class SVGWriter:
         text_clear_btn = tk.Button(text_frame, text="clear Text", command=clear_text)
         text_clear_btn.pack(side=tk.LEFT)
 
-        save_button = tk.Button(bottom_frame, text="Save", command=self.save_svg, width=5, height=2, padx=4,
-                                highlightcolor="blue")
+        save_button = tk.Button(
+            bottom_frame,
+            text="Save",
+            command=self.save_svg,
+            width=5,
+            height=2,
+            padx=4,
+            highlightcolor="blue",
+        )
         save_button.pack()
 
         self.setInputlayout()
@@ -190,7 +206,7 @@ class SVGWriter:
                     dwg.text(
                         shape["text"],
                         insert=(shape["x"], shape["y"]),
-                        fill=shape["fill"]
+                        fill=shape["fill"],
                     )
                 )
         dwg.save()
@@ -234,9 +250,7 @@ class SVGWriter:
                 "stroke": self.current_color,
             }
             self.shapes.append(params)
-            rect_id = self.canvas.create_oval(
-                x1, y1, x2, y2, fill=self.current_color
-            )
+            rect_id = self.canvas.create_oval(x1, y1, x2, y2, fill=self.current_color)
             self.canvas.tag_bind(
                 rect_id, "<Button-3>", lambda event: self.delete_shape(rect_id)
             )
@@ -253,9 +267,7 @@ class SVGWriter:
                 "stroke": self.current_color,
             }
             self.shapes.append(params)
-            rect_id = self.canvas.create_oval(
-                x1, y1, x2, y2, fill=self.current_color
-            )
+            rect_id = self.canvas.create_oval(x1, y1, x2, y2, fill=self.current_color)
             self.canvas.tag_bind(
                 rect_id, "<Button-3>", lambda event: self.delete_shape(rect_id)
             )
@@ -272,13 +284,9 @@ class SVGWriter:
             for xp, yp in listPoint:
                 xc, yc = midx + xp, midy + yp
                 newlistpoint.append((xc, yc))
-            params = {
-                "points": newlistpoint
-            }
+            params = {"points": newlistpoint}
             self.shapes.append(params)
-            rect_id = self.canvas.create_line(newlistpoint,
-                                              fill=self.current_color
-                                              )
+            rect_id = self.canvas.create_line(newlistpoint, fill=self.current_color)
             self.canvas.tag_bind(
                 rect_id, "<Button-3>", lambda event: self.delete_shape(rect_id)
             )
@@ -296,13 +304,9 @@ class SVGWriter:
             for xp, yp in listPoint:
                 xc, yc = midx + xp, midy + yp
                 newlistpoint.append((xc, yc))
-            params = {
-                "points": newlistpoint
-            }
+            params = {"points": newlistpoint}
             self.shapes.append(params)
-            rect_id = self.canvas.create_polygon(newlistpoint,
-                                                 fill=self.current_color
-                                                 )
+            rect_id = self.canvas.create_polygon(newlistpoint, fill=self.current_color)
             self.canvas.tag_bind(
                 rect_id, "<Button-3>", lambda event: self.delete_shape(rect_id)
             )
@@ -318,7 +322,7 @@ class SVGWriter:
             }
             self.shapes.append(params)
             rect_id = self.canvas.create_text(
-                event.x, event.y, fill=self.current_color
+                (event.x, event.y), fill=self.current_color, text=self.text
             )
             self.canvas.tag_bind(
                 rect_id, "<Button-3>", lambda event: self.delete_shape(rect_id)
